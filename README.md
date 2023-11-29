@@ -16,7 +16,7 @@ More docs available at https://github.com/Kottakji/somestate
 import { useStore } from 'somestate/react'
 import { store } from 'somestate'
 
-// Or get from src/stores/countStore.js
+// Or import it from src/stores/countStore.js
 const $count = store(0);
 
 export const Example = () => {
@@ -35,7 +35,7 @@ export const Example = () => {
 import { useStore } from 'somestate/react'
 import { fetched } from 'somestate'
 
-// Or get from src/stores/countStore.js
+// Or import it from src/stores/countStore.js
 const $todos = fetched(`https://jsonplaceholder.typicode.com/todos`)
 
 export const Todos = () => {
