@@ -2,7 +2,9 @@
 
 ## Install
 
-```npm install somestate-react```
+```bash
+npm install somestate-react
+```
 
 ## Documentation
 
