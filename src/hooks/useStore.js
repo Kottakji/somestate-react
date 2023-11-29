@@ -6,7 +6,13 @@ export const useStore = (store) => {
   useEffect(() => {
     const listener = store.listen((value) => setValue(value));
 
-    return () => listener.unsubscribe();
+    return () => {
+      // Unsubscribe the listener
+      listener.unsubscribe();
+
+      // Unsubscribe other dependencies
+      store.clear();
+    }
   }, []);
 
   return value;
