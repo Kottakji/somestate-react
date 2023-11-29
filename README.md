@@ -2,7 +2,11 @@
 
 ## Install
 
-`npm install somestate/react`
+```npm install somestate-react```
+
+## Documentation
+
+More docs available at https://github.com/Kottakji/somestate
 
 ## Hooks
 
@@ -46,7 +50,3 @@ export const Todos = () => {
   )
 }
 ```
-
-## Documentation
-
-More docs available at https://github.com/Kottakji/somestate
