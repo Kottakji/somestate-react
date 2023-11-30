@@ -1,6 +1,6 @@
 {
   "name": "somestate-react",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "React integration for somestores",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Kottakji/somestate-react#readme",
   "dependencies": {
-    "somestate": "^0.2.9"
+    "somestate": "^0.2.10"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
