@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {Store, Fetched, Computed, Persistent} from "somestate"
+import { Store, Fetched, Computed, Persistent } from "somestate";
 
 /**
  * Custom hook for subscribing to changes in a store and returning the current value.
@@ -20,7 +20,7 @@ export const useStore = (store, keys = null) => {
 
       // Unsubscribe other dependencies
       store.clear();
-    }
+    };
   }, []);
 
   return value;
