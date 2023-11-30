@@ -125,4 +125,50 @@ describe("useStore", () => {
       expect($dependency.listeners.length).toEqual(0);
     });
   });
+
+  test("We can listen to store changes, only when the keys change", async () => {
+    const $store = store({a: 'a', b: 'b'});
+
+    const Component = () => {
+      const value = useStore($store, ['a']);
+
+      useEffect(() => {
+        if (value.b === 'c') {
+          throw new Error(`Shouldn't update`)
+        }
+      }, [value]);
+
+      return <p>{value.b}</p>;
+    };
+
+    act(() => {
+      renderer.create(<Component/>);
+    }).then(() => {
+      $store.set({a: 'a', b: 'c'});
+
+      expect($store.get().b).toEqual('c')
+    })
+  });
+
+  test("We can listen to store changes, only when the keys change (2)", (done) => {
+    const $store = store({a: 'a', b: 'b'});
+
+    const Component = () => {
+      const value = useStore($store, ['b']);
+
+      useEffect(() => {
+        if (value.b === 'c') {
+          done()
+        }
+      }, [value]);
+
+      return <p>{value.b}</p>;
+    };
+
+    act(() => {
+      renderer.create(<Component/>);
+    }).then(() => {
+      $store.set({a: 'a', b: 'c'});
+    })
+  });
 });
