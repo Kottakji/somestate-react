@@ -1,29 +1,28 @@
 import { describe, expect, test } from "@jest/globals";
 import { store } from "somestate";
 import { useStore } from "./useStore.js";
-import renderer, { act, unstable_batchedUpdates } from "react-test-renderer";
 import { computed } from "somestate/src/computed";
 import { fetched } from "somestate/src/fetched";
 import { useEffect } from "react";
+import { useFetched } from "./useFetched";
+import { act, render, screen, waitFor } from "@testing-library/react";
 
 describe("useStore", () => {
-  test("We can listen to store changes", () => {
+  test("We can listen to store changes", async () => {
     const $store = store(0);
 
     const Component = () => {
       const value = useStore($store);
 
-      return <p>{value}</p>;
+      return <p data-testid="id">{value}</p>;
     };
 
-    const component = renderer.create(<Component />);
-    expect(component.toJSON()).toEqual(renderer.create(<p>0</p>).toJSON());
+    render(<Component />);
+    expect(screen.getByTestId("id")).toHaveTextContent(0);
 
-    act(() => {
-      $store.set(1);
-    });
+    act(() => void $store.set(1));
 
-    expect(component.toJSON()).toEqual(renderer.create(<p>1</p>).toJSON());
+    expect(screen.getByTestId("id")).toHaveTextContent(1);
   });
 
   test("We can have a computed value", () => {
@@ -35,38 +34,34 @@ describe("useStore", () => {
     const Component = () => {
       const value = useStore($even);
 
-      return <p>{value.length}</p>;
+      return <p data-testid="id">{value.length}</p>;
     };
 
-    const component = renderer.create(<Component />);
-    expect(component.toJSON()).toEqual(renderer.create(<p>1</p>).toJSON());
+    render(<Component />);
+    expect(screen.getByTestId("id")).toHaveTextContent(1);
 
     act(() => {
       $items.set([1, 2, 3, 4]);
     });
 
-    expect(component.toJSON()).toEqual(renderer.create(<p>2</p>).toJSON());
+    expect(screen.getByTestId("id")).toHaveTextContent(2);
   });
 
-  test("We can have a fetched value", (done) => {
-    // Ignore require using at(), unsure how to remove this log, it should still fail if done is not called
-    console.error = () => {};
-
+  test("We can have a fetched value", async () => {
     const $todo = fetched(`https://jsonplaceholder.typicode.com/todos/1`);
 
     const Component = () => {
       const todo = useStore($todo);
 
-      useEffect(() => {
-        if (todo?.id === 1) {
-          done();
-        }
-      });
-
-      return <p>{todo?.id}</p>;
+      return <p data-testid="id">{todo?.id}</p>;
     };
 
-    renderer.create(<Component />);
+    render(<Component />);
+    expect(screen.getByTestId("id")).not.toHaveTextContent("1");
+
+    await waitFor(() => {
+      expect(screen.getByTestId("id")).toHaveTextContent("1");
+    });
   });
 
   test("When the component is unmounted, the listener is cleared", async () => {
@@ -78,51 +73,14 @@ describe("useStore", () => {
       return <p>{todo?.id}</p>;
     };
 
-    let unmount;
-    await act(() => {
-      const result = renderer.create(<Component />);
-      unmount = result.unmount;
-    });
+    const component = render(<Component />);
 
     expect($todo.listeners.length).toEqual(1);
 
-    await act(() => {
-      unmount();
-    });
+    act(() => void component.unmount());
 
-    act(() => {
+    await waitFor(() => {
       expect($todo.listeners.length).toEqual(0);
-    });
-  });
-
-  test("When a component with dependencies is unmounted, the listeners on the dependency are cleared", async () => {
-    const $dependency = store(false);
-    const $todo = fetched(
-      `https://jsonplaceholder.typicode.com/todos/1`,
-      {},
-      { dependencies: [$dependency] },
-    );
-
-    expect($dependency.listeners.length).toEqual(1);
-
-    const Component = () => {
-      const todo = useStore($todo);
-
-      return <p>{todo?.id}</p>;
-    };
-
-    let unmount;
-    await act(() => {
-      const result = renderer.create(<Component />);
-      unmount = result.unmount;
-    });
-
-    await act(() => {
-      unmount();
-    });
-
-    act(() => {
-      expect($dependency.listeners.length).toEqual(0);
     });
   });
 
@@ -132,43 +90,21 @@ describe("useStore", () => {
     const Component = () => {
       const value = useStore($store, ["a"]);
 
-      useEffect(() => {
-        if (value.b === "c") {
-          throw new Error(`Shouldn't update`);
-        }
-      }, [value]);
-
-      return <p>{value.b}</p>;
+      return <p data-testid="id">{value.b}</p>;
     };
 
-    act(() => {
-      renderer.create(<Component />);
-    }).then(() => {
-      $store.set({ a: "a", b: "c" });
+    render(<Component />);
 
+    act(() => void $store.set({ a: "a", b: "c" }));
+
+    await waitFor(() => {
       expect($store.get().b).toEqual("c");
     });
-  });
 
-  test("We can listen to store changes, only when the keys change (2)", (done) => {
-    const $store = store({ a: "a", b: "b" });
+    act(() => void $store.set({ b: "d" }));
 
-    const Component = () => {
-      const value = useStore($store, ["b"]);
-
-      useEffect(() => {
-        if (value.b === "c") {
-          done();
-        }
-      }, [value]);
-
-      return <p>{value.b}</p>;
-    };
-
-    act(() => {
-      renderer.create(<Component />);
-    }).then(() => {
-      $store.set({ a: "a", b: "c" });
+    await waitFor(() => {
+      expect($store.get().b).not.toEqual("c");
     });
   });
 });

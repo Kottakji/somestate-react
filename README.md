@@ -12,6 +12,8 @@ More docs available at https://github.com/Kottakji/somestate
 
 ## Hooks
 
+### useStore
+
 ```js
 import { useStore } from 'somestate/react'
 import { store } from 'somestate'
@@ -31,6 +33,10 @@ export const Example = () => {
 }
 ```
 
+### useFetched
+
+This includes the data, loading and error values that can be destructured.
+
 ```js
 import { useStore } from 'somestate/react'
 import { fetched } from 'somestate'
@@ -39,7 +45,7 @@ import { fetched } from 'somestate'
 const $todos = fetched(`https://jsonplaceholder.typicode.com/todos`)
 
 export const Todos = () => {
-  const {data: todos, loading, error} = useStore($todos)
+  const {data: todos, loading, error} = useFetched($todos)
 
   if (loading) {
     return <></>
