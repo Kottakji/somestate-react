@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Kottakji/somestate-react#readme",
   "dependencies": {
-    "somestate": "^0.2.28"
+    "somestate": "^0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
