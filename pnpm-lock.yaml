@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       somestate:
-        specifier: ^0.4
-        version: 0.4.0
+        specifier: ^0.4.1
+        version: 0.4.1
     devDependencies:
       '@babel/core':
         specifier: ^7.23.3
@@ -1976,8 +1976,8 @@ packages:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
 
-  somestate@0.4.0:
-    resolution: {integrity: sha512-Hjehz4b6VyTxv4U+EXehR+IDVAYjW0qIdNj8qsPL1AtLLFqnEGNx5+sPZvP9irFXxBLFphz8r+UZtoXb/wFe8w==}
+  somestate@0.4.1:
+    resolution: {integrity: sha512-k2VHCmNUWKAufeffVn6cpKSc3C+NgC4jCe4zfPgClwEU81NFWr/YMZkqaG9Ooo7uE8UXXzDmHQrQd1LSIObglQ==}
 
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
@@ -4639,7 +4639,7 @@ snapshots:
 
   slash@3.0.0: {}
 
-  somestate@0.4.0:
+  somestate@0.4.1:
     dependencies:
       '@ungap/structured-clone': 1.2.1
 
