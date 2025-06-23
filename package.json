@@ -1,6 +1,6 @@
 {
   "name": "somestate-react",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "React integration for somestores",
   "main": "index.js",
   "scripts": {
